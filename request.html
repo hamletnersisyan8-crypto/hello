@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Առաջարկներ և կարծիքներ | Նախագծային</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Armenian:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#061225;--panel:#0c1d36;--panel2:#102746;--cyan:#35d9ff;--blue:#2475ff;--muted:#a8bad2;--line:rgba(114,183,255,.18)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans Armenian",Arial,sans-serif;min-height:100vh;color:#f4f8ff;background:radial-gradient(ellipse at 15% 5%,#123c69 0,transparent 38%),linear-gradient(135deg,#050e1d,#081a32 55%,#092b4b)}
+nav{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;padding:17px 7%;background:rgba(3,15,32,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.logo{font-size:21px;font-weight:800;color:var(--cyan)}
+nav ul{display:flex;gap:19px;list-style:none;flex-wrap:wrap}
+nav a{color:#dceaff;text-decoration:none;font-size:13px;transition:.25s}
+nav a:hover,nav a[aria-current=page]{color:var(--cyan)}
+main{max-width:1180px;margin:auto;padding:54px 22px 70px}
+.hero{text-align:center;margin-bottom:34px;animation:rise .65s ease both}
+.tag{display:inline-block;padding:7px 13px;border:1px solid #35d9ff55;border-radius:30px;color:var(--cyan);font-size:11px;letter-spacing:1px;background:#35d9ff0c}
+h1{font-size:clamp(29px,5vw,43px);margin:17px 0 12px}
+.hero p{max-width:700px;margin:auto;color:var(--muted);line-height:1.8;font-size:14px}
+.contact-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:22px;align-items:stretch}
+.choice-panel,.message-panel{background:linear-gradient(145deg,rgba(14,37,66,.96),rgba(7,24,46,.96));border:1px solid var(--line);border-radius:23px;box-shadow:0 22px 65px #0004}
+.choice-panel{padding:27px;display:flex;flex-direction:column}
+.choice-panel h2,.message-panel h2{font-size:20px;margin-bottom:9px}
+.subtext{color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:22px}
+.choices{display:grid;gap:12px}
+.choice{width:100%;display:flex;align-items:center;gap:14px;text-align:left;padding:15px;border:1px solid #ffffff14;border-radius:15px;background:#ffffff07;color:white;cursor:pointer;transition:transform .25s,border-color .25s,background .25s; font:inherit}
+.choice:hover{transform:translateX(5px);border-color:#35d9ff77;background:#35d9ff0d}
+.choice[aria-pressed=true]{border-color:var(--cyan);background:linear-gradient(110deg,#087cff2b,#35d9ff12);box-shadow:inset 3px 0 var(--cyan)}
+.choice-icon{width:43px;height:43px;flex:0 0 43px;display:grid;place-items:center;border-radius:13px;background:#35d9ff16;font-size:21px}
+.choice-copy{display:grid;gap:4px}
+.choice-copy strong{font-size:14px}
+.choice-copy small{font-size:11px;color:var(--muted)}
+.choice-arrow{margin-left:auto;color:var(--cyan);font-size:20px}
+.hint{margin-top:auto;padding-top:24px;color:#8299b8;font-size:11px;line-height:1.7}
+.message-panel{padding:30px;position:relative;overflow:hidden;min-height:440px}
+.message-panel:before{content:"";position:absolute;width:230px;height:230px;right:-110px;top:-110px;border-radius:50%;background:#35d9ff12;pointer-events:none}
+.form-content{position:relative;animation:slideIn .42s cubic-bezier(.2,.8,.2,1) both}
+.form-kicker{color:var(--cyan);font-size:11px;font-weight:700;letter-spacing:.7px;margin-bottom:10px}
+.message-panel h2{font-size:23px;margin-bottom:7px}
+.message-panel .intro{color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:24px}
+.field{margin-bottom:17px}
+label{display:block;margin-bottom:8px;font-size:12px;font-weight:700;color:#dceaff}
+input,textarea,select{width:100%;padding:13px 14px;border:1px solid #ffffff20;border-radius:11px;background:#07182d;color:#f4f8ff;font:inherit;font-size:13px;outline:none;transition:border-color .2s,box-shadow .2s}
+input::placeholder,textarea::placeholder{color:#7186a5}
+input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 4px #35d9ff13}
+textarea{min-height:145px;resize:vertical;line-height:1.7}
+select option{background:#102746;color:white}
+.send{width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(110deg,#2475ff,#20c9ed);color:white;font:inherit;font-size:14px;font-weight:800;cursor:pointer;transition:.25s}
+.send:hover{transform:translateY(-3px);box-shadow:0 12px 28px #20a0ff44;filter:brightness(1.08)}
+.send:active{transform:scale(.99)}
+.privacy{text-align:center;color:#8296b3;font-size:10px;line-height:1.6;margin-top:15px}
+footer{text-align:center;padding:22px;color:#8095b3;font-size:11px;border-top:1px solid #ffffff0d}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(18px) scale(.99)}to{opacity:1;transform:translateX(0) scale(1)}}
+@media(max-width:800px){.contact-layout{grid-template-columns:1fr}.choice-panel{padding:22px}.message-panel{min-height:0}}
+@media(max-width:520px){nav{justify-content:center;text-align:center}nav ul{justify-content:center;gap:12px}nav a{font-size:11px}main{padding:38px 14px 50px}.message-panel{padding:22px}.choice-panel{padding:19px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<nav>
+ <div class="logo">📡 Նախագծային</div>
+ <ul>
+  <li><a href="index.html">Գլխավոր</a></li>
+  <li><a href="waves.html">Էլեկտրամագնիսական ալիքներ</a></li>
+  <li><a href="internet.html">Համացանց</a></li>
+  <li><a href="radio.html">Ռադիոհաղորդակցություն</a></li>
+  <li><a href="request.html" aria-current="page">Առաջարկներ և կարծիքներ</a></li>
+ </ul>
+</nav>
+<main>
+ <header class="hero">
+  <span class="tag">ՄԵՆՔ ԿԱՊԻ ՄԵՋ ԵՆՔ</span>
+  <h1>Առաջարկներ և կարծիքներ</h1>
+  <p>Ընտրեք ձեզ հետաքրքրող բաժինը։ Աջ կողմում կբացվի հաղորդագրության դաշտը, որտեղ կարող եք ուղարկել ձեր միտքը, հարցը կամ առաջարկը։</p>
+ </header>
+ <section class="contact-layout" aria-label="Առաջարկների և հաղորդագրությունների բաժին">
+  <aside class="choice-panel">
+   <h2>Ինչի՞ մասին եք ուզում գրել</h2>
+   <p class="subtext">Սեղմեք ձախ կողմի կետերից մեկի վրա՝ համապատասխան ձևը բացելու համար։</p>
+   <div class="choices">
+    <button class="choice" type="button" data-kind="suggestion" aria-pressed="true">
+     <span class="choice-icon">💡</span><span class="choice-copy"><strong>Առաջարկ ունեմ</strong><small>Կիսվեք նոր գաղափարով կամ բարելավմամբ</small></span><span class="choice-arrow">›</span>
+    </button>
+    <button class="choice" type="button" data-kind="feedback" aria-pressed="false">
+     <span class="choice-icon">⭐</span><span class="choice-copy"><strong>Կարծիք ունեմ</strong><small>Գրեք՝ ինչն է ձեզ դուր եկել կամ ինչ փոխել</small></span><span class="choice-arrow">›</span>
+    </button>
+    <button class="choice" type="button" data-kind="question" aria-pressed="false">
+     <span class="choice-icon">💬</span><span class="choice-copy"><strong>Հարց ունեմ</strong><small>Հարցրեք նախագծի կամ թեմաների մասին</small></span><span class="choice-arrow">›</span>
+    </button>
+   </div>
+   <p class="hint">Ձեր ուղարկած հաղորդագրությունները կօգնեն մեզ զարգացնել նախագիծը և դարձնել այն ավելի օգտակար։</p>
+  </aside>
+  <section class="message-panel" aria-live="polite">
+   <div class="form-content" id="formContent">
+    <div class="form-kicker" id="formKicker">ՁԵՐ ԳԱՂԱՓԱՐԸ ԿԱՐԵՎՈՐ Է</div>
+    <h2 id="formTitle">Ուղարկեք ձեր առաջարկը</h2>
+    <p class="intro" id="formIntro">Նկարագրեք ձեր գաղափարը կամ առաջարկեք՝ ինչպես կարող ենք բարելավել կայքը։</p>
+    <form action="https://formspree.io/f/meaggoqa" method="POST" id="messageForm">
+     <input type="hidden" name="_subject" id="subject" value="Կայքի առաջարկ">
+     <input type="hidden" name="message_type" id="messageType" value="Առաջարկ">
+     <div class="field">
+      <label for="topicSelect">Թեմա</label>
+      <select id="topicSelect" name="topic" required>
+       <option value="" selected disabled>Ընտրեք թեման...</option>
+       <option>Էլեկտրամագնիսական ալիքներ</option>
+       <option>Համացանց</option>
+       <option>Ռադիոհաղորդակցություն</option>
+       <option>Վիրտուալ լաբորատորիա</option>
+       <option>Կայքի ձևավորում և աշխատանք</option>
+      </select>
+      <input id="topicText" name="topic" type="text" placeholder="Գրեք ձեր առաջարկի թեման..." autocomplete="off" hidden disabled>
+     </div>
+     <div class="field">
+      <label for="message">Հաղորդագրություն</label>
+      <textarea id="message" name="message" placeholder="Գրեք ձեր հաղորդագրությունը..." required></textarea>
+     </div>
+     <button class="send" type="submit">Ուղարկել հաղորդագրությունը&nbsp; →</button>
+     <p class="privacy">🔒 Ուղարկելուց առաջ ստուգեք ձեր հաղորդագրությունը։ Անուն կամ էլ․ փոստ լրացնել պարտադիր չէ։</p>
+    </form>
+   </div>
+  </section>
+ </section>
+</main>
+<footer>© 2026 Նախագծային կայք | Գիտություն • Տեխնոլոգիա • Կապ</footer>
+<script>
+const configs={
+ suggestion:{type:"Առաջարկ",subject:"Կայքի նոր առաջարկ",kicker:"ՁԵՐ ԳԱՂԱՓԱՐԸ ԿԱՐԵՎՈՐ Է",title:"Ուղարկեք ձեր առաջարկը",intro:"Նկարագրեք ձեր գաղափարը կամ առաջարկեք՝ ինչպես կարող ենք բարելավել կայքը։",placeholder:"Ի՞նչ կցանկանայիք ավելացնել կամ փոխել։"},
+ feedback:{type:"Կարծիք",subject:"Կայքի վերաբերյալ կարծիք",kicker:"ՄԵՆՔ ԼՍՈՒՄ ԵՆՔ ՁԵԶ",title:"Կիսվեք ձեր կարծիքով",intro:"Գրեք ձեր տպավորությունների մասին․ ձեր արձագանքը մեզ օգնում է զարգացնել նախագիծը։",placeholder:"Ի՞նչն է ձեզ դուր եկել, և ի՞նչը կարելի է բարելավել։"},
+ question:{type:"Հարց",subject:"Հարց նախագծի վերաբերյալ",kicker:"ՊԱՏՐԱՍՏ ԵՆՔ ՕԳՆԵԼ",title:"Ուղարկեք ձեր հարցը",intro:"Գրեք՝ նախագծի կամ ներկայացված թեմաների որ մասն է ձեզ հետաքրքրում։",placeholder:"Գրեք ձեր հարցը այստեղ..."}
+};
+const content=document.getElementById("formContent");
+const topicSelect=document.getElementById("topicSelect");
+const topicText=document.getElementById("topicText");
+const topicLabel=document.querySelector('label[for="topic"]');
+
+document.querySelectorAll(".choice").forEach(button=>{
+ button.addEventListener("click",()=>{
+  const cfg=configs[button.dataset.kind];
+  document.querySelectorAll(".choice").forEach(item=>item.setAttribute("aria-pressed",String(item===button)));
+  content.classList.remove("form-content");
+  void content.offsetWidth;
+  content.classList.add("form-content");
+  document.getElementById("formKicker").textContent=cfg.kicker;
+  document.getElementById("formTitle").textContent=cfg.title;
+  document.getElementById("formIntro").textContent=cfg.intro;
+  document.getElementById("message").placeholder=cfg.placeholder;
+  document.getElementById("messageType").value=cfg.type;
+  document.getElementById("subject").value=cfg.subject;
+
+  // Առաջարկի դեպքում թեման լրացվում է ազատ տեքստով, մյուս դեպքերում՝ ցանկից։
+  const isSuggestion=button.dataset.kind==="suggestion";
+  topicSelect.hidden=isSuggestion;
+  topicSelect.disabled=isSuggestion;
+  topicSelect.required=!isSuggestion;
+  topicText.hidden=!isSuggestion;
+  topicText.disabled=!isSuggestion;
+  topicText.required=isSuggestion;
+  if(isSuggestion){
+   topicSelect.value="";
+   topicText.value="";
+   topicLabel.htmlFor="topicText";
+   topicText.placeholder="Գրեք ձեր առաջարկի թեման...";
+  }else{
+   topicText.value="";
+   topicLabel.htmlFor="topicSelect";
+  }
+  document.getElementById("message").focus({preventScroll:true});
+ });
+});
+</script>
+</body>
+</html>

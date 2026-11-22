@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ռադիոհաղորդակցության վիրտուալ լաբորատորիա</title>
+<style>
+:root{--navy:#071a31;--blue:#1476c8;--cyan:#20cfff;--gold:#ffbf69;--text:#1d2939;--muted:#64748b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#eef3f9;color:var(--text);line-height:1.55}
+header{padding:30px 18px;text-align:center;color:#fff;background:linear-gradient(120deg,#09203f,#1769aa)}
+header h1{font-size:clamp(23px,4vw,32px);margin-bottom:7px}
+header p{color:#d8ecff}
+nav{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;padding:13px;background:#09203f}
+nav a{color:#dceeff;text-decoration:none;font-size:13px}
+nav a:hover{color:var(--cyan)}
+main{max-width:1160px;margin:auto;padding:22px}
+.panel{background:#fff;margin-bottom:20px;padding:23px;border-radius:16px;box-shadow:0 5px 20px #0b315012;border:1px solid #dce7f2}
+h2{color:#145b96;margin-bottom:14px;font-size:21px}
+p{margin-bottom:10px}
+.intro p,.theory p{line-height:1.8;color:#475569}
+.lab-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+.equipment{display:grid;grid-template-columns:1fr .7fr 1fr;align-items:center;text-align:center;gap:10px;background:linear-gradient(140deg,#eaf4ff,#f4faff);padding:22px 12px;border-radius:14px;min-height:250px}
+.device-icon{font-size:46px;margin:10px}
+.device h3{font-size:15px}
+.device p{font-size:12px;color:#64748b}
+.status{font-size:12px;font-weight:700;color:#b42318}
+.status.on{color:#07804a}
+.antenna{height:28px;width:3px;background:#145b96;margin:auto}
+.waves{color:#1676d2;font-weight:bold;font-size:12px}
+.wave{width:36px;height:36px;border:2px solid #1689e8;border-radius:50%;margin:-3px auto;opacity:0}
+.waves.active .wave{animation:pulse 1.5s infinite}
+.waves.active .wave:nth-child(2){animation-delay:.35s}
+.waves.active .wave:nth-child(3){animation-delay:.7s}
+@keyframes pulse{0%{transform:scale(.55);opacity:1}100%{transform:scale(1.55);opacity:0}}
+.controls{display:flex;flex-direction:column;gap:11px}
+.control-head{display:flex;justify-content:space-between;gap:12px;align-items:center}
+button{padding:12px;border:0;border-radius:9px;color:#fff;background:#1476c8;cursor:pointer;font-weight:700;transition:.2s}
+button:hover{filter:brightness(1.1);transform:translateY(-1px)}
+#stopBtn{background:#d04444}
+.button-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+label{font-size:13px;font-weight:600;color:#34465b}
+input[type=range]{width:100%;accent-color:#1476c8;cursor:pointer}
+select{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;background:white;color:#24364b}
+.hint{font-size:11px;color:#64748b}
+.visualization canvas{display:block;width:100%;height:300px;background:#081a30;border-radius:12px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin:12px 0 0;font-size:12px;color:#475569}
+.legend span:before{content:"";display:inline-block;width:18px;height:3px;vertical-align:middle;margin-right:6px;background:#00d9ff}
+.legend .envelope:before{background:#ffbb55}
+.legend .received:before{background:#83e29b}
+#signalInfo{margin-top:12px;color:#526477;font-size:13px}
+.result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.metric{padding:16px;background:#eaf4ff;border-radius:11px;text-align:center}
+.metric h3{font-size:12px;color:#526477;margin-bottom:8px}
+.metric p{font-size:20px;font-weight:800;color:#0874c5;margin:0;overflow-wrap:anywhere}
+.note{padding:13px 15px;background:#fff8e8;border-left:4px solid #f0b44d;border-radius:8px;color:#75551d;font-size:12px;line-height:1.7}
+footer{text-align:center;padding:22px;background:#09203f;color:#dceaff;font-size:12px}
+@media(max-width:800px){.lab-grid{grid-template-columns:1fr}.result-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){main{padding:13px}.panel{padding:17px}.equipment{grid-template-columns:1fr;gap:16px}.waves{display:flex;align-items:center;justify-content:center;gap:3px}.wave{margin:0}.result-grid{grid-template-columns:1fr 1fr}.visualization canvas{height:240px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+ <h1>📡 Ռադիոհաղորդակցության վիրտուալ լաբորատորիա</h1>
+ <p>Ռադիոազդանշանի փոխանցման, մոդուլացման և ընդունման ուսումնական մոդելավորում</p>
+</header>
+<nav>
+ <a href="index.html">Գլխավոր</a><a href="waves.html">Էլեկտրամագնիսական ալիքներ</a><a href="internet.html">Համացանց</a><a href="radio.html">Ռադիոհաղորդակցություն</a><a href="request.html">Առաջարկներ և կարծիքներ</a>
+</nav>
+<main>
+ <section class="panel intro">
+  <h2>Լաբորատոր աշխատանքի նպատակը</h2>
+  <p>Փորձել, թե ինչպես են հաճախականությունը, ամպլիտուդը, հեռավորությունը և խանգարումները ազդում ընդունվող ռադիոազդանշանի վրա։ Փոխելով պարամետրերը՝ հետևեք գրաֆիկին և արդյունքներին։</p>
+ </section>
+ <section class="panel">
+  <div class="lab-grid">
+   <div class="equipment">
+    <div class="device">
+     <div class="antenna"></div><div class="device-icon">📻</div>
+     <h3>Ռադիոհաղորդիչ</h3><p>Ձևավորում է ազդանշանը</p>
+     <span class="status" id="transmitterStatus">Անջատված է</span>
+    </div>
+    <div class="waves" id="waveAnimation"><div class="wave"></div><div class="wave"></div><div class="wave"></div><span>Ալիքներ</span></div>
+    <div class="device">
+     <div class="antenna"></div><div class="device-icon">📻</div>
+     <h3>Ռադիոընդունիչ</h3><p>Ընդունում է ազդանշանը</p>
+     <span class="status" id="receiverStatus">Սպասման ռեժիմ</span>
+    </div>
+   </div>
+   <div class="controls">
+    <h2>Կառավարման վահանակ</h2>
+    <div class="button-row"><button id="startBtn" type="button">▶ Սկսել փորձը</button><button id="stopBtn" type="button">■ Դադարեցնել</button></div>
+    <label for="frequency">Հաճախականություն՝ <strong id="frequencyValue">100</strong> kHz</label>
+    <input type="range" id="frequency" min="10" max="200" value="100" step="1">
+    <label for="amplitude">Հաղորդիչի ամպլիտուդ՝ <strong id="amplitudeValue">70</strong>%</label>
+    <input type="range" id="amplitude" min="10" max="100" value="70">
+    <label for="distance">Հեռավորություն՝ <strong id="distanceValue">30</strong> մ</label>
+    <input type="range" id="distance" min="1" max="100" value="30">
+    <label for="noise">Խանգարումների մակարդակ՝ <strong id="noiseValue">5</strong>%</label>
+    <input type="range" id="noise" min="0" max="100" value="5">
+    <label for="modulation">Մոդուլացման տեսակ</label>
+    <select id="modulation">
+     <option value="AM">AM — ամպլիտուդային</option>
+     <option value="FM">FM — հաճախականային</option>
+     <option value="none">Առանց մոդուլացման</option>
+    </select>
+    <p class="hint">Փոխեք ցանկացած պարամետր․ գրաֆիկն ու արդյունքները կթարմացվեն անմիջապես։</p>
+   </div>
+  </div>
+ </section>
+ <section class="panel visualization">
+  <h2>Ազդանշանի գրաֆիկական պատկերում</h2>
+  <canvas id="signalCanvas" aria-label="Փոխանցվող և ընդունվող ազդանշանների գրաֆիկ"></canvas>
+  <div class="legend"><span>Փոխանցվող ազդանշան</span><span class="envelope">AM ծրար</span><span class="received">Ընդունվող ազդանշան</span></div>
+  <p id="signalInfo" aria-live="polite">Սկսեք փորձը՝ ազդանշանի գրաֆիկը տեսնելու համար։</p>
+ </section>
+ <section class="panel">
+  <h2>Փորձի արդյունքները</h2>
+  <div class="result-grid">
+   <div class="metric"><h3>Հաճախականություն</h3><p id="resultFrequency">—</p></div>
+   <div class="metric"><h3>Ալիքի երկարություն</h3><p id="wavelength">—</p></div>
+   <div class="metric"><h3>Ընդունված ուժգնություն</h3><p id="signalStrength">—</p></div>
+   <div class="metric"><h3>Կապի որակ</h3><p id="connection">—</p></div>
+  </div>
+ </section>
+ <section class="panel theory">
+  <h2>Ինչպե՞ս մեկնաբանել արդյունքները</h2>
+  <p><b>Հաճախականություն.</b> հաճախականության մեծացման դեպքում ալիքի երկարությունը փոքրանում է։ Կապը նկարագրվում է λ = c / f բանաձևով, որտեղ c-ն լույսի արագությունն է, իսկ f-ը՝ հաճախականությունը։</p>
+  <p><b>Ամպլիտուդ.</b> ամպլիտուդի մեծացումը բարձրացնում է մոդելում փոխանցվող ազդանշանի սկզբնական մակարդակը։</p>
+  <p><b>Հեռավորություն և խանգարումներ.</b> հեռավորության մեծացման և խանգարումների ավելացման դեպքում ընդունիչին հասնող ազդանշանի որակը նվազում է։</p>
+  <p><b>AM և FM.</b> AM-ի դեպքում փոփոխվում է կրող ալիքի ամպլիտուդը, իսկ FM-ի դեպքում՝ հաճախականությունը։</p>
+  <div class="note">Ուշադրություն․ սա ուսումնական համակարգչային մոդելավորում է, ոչ թե իրական ռադիոհաղորդիչ։ Ցուցադրվող ուժգնության և կապի որակի թվերը պայմանական են և նախատեսված են պարամետրերի ազդեցությունը համեմատելու համար։</div>
+ </section>
+</main>
+<footer>Վիրտուալ ֆիզիկայի լաբորատորիա © 2026</footer>
+<script>
+"use strict";
+const canvas=document.getElementById("signalCanvas");
+const ctx=canvas.getContext("2d");
+const el=id=>document.getElementById(id);
+const controls=["frequency","amplitude","distance","noise","modulation"];
+let running=false,elapsed=0,rafId=0,lastFrame=0;
+const reducedMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function readData(){
+ const f=Number(el("frequency").value),a=Number(el("amplitude").value);
+ const d=Number(el("distance").value),n=Number(el("noise").value),mode=el("modulation").value;
+ // Հակադարձ քառակուսային թուլացման պարզեցված, նորմավորված մոդել
+ const attenuation=1/(1+Math.pow(d/30,2));
+ const received=Math.max(0,Math.min(100,a*attenuation*(1-n/100)));
+ const wavelength=300000/f; // c=300 000 km/s, f-ն՝ kHz => λ-ն՝ km
+ return {f,a,d,n,mode,attenuation,received,wavelength};
+}
+function update(){
+ const x=readData();
+ el("frequencyValue").textContent=x.f;
+ el("amplitudeValue").textContent=x.a;
+ el("distanceValue").textContent=x.d;
+ el("noiseValue").textContent=x.n;
+ el("resultFrequency").textContent=running?x.f+" kHz":"—";
+ el("wavelength").textContent=(x.wavelength>=1000?(x.wavelength/1000).toFixed(2)+" Mm":x.wavelength.toFixed(2)+" km");
+ el("signalStrength").textContent=running?Math.round(x.received)+"%":"—";
+ const quality=x.received>=55?"Լավ":x.received>=25?"Միջին":x.received>5?"Թույլ":"Շատ թույլ";
+ el("connection").textContent=running?quality:"—";
+ el("transmitterStatus").textContent=running?"Փոխանցում է":"Անջատված է";
+ el("transmitterStatus").classList.toggle("on",running);
+ el("receiverStatus").textContent=running?(x.received>=5?"Ազդանշան է ընդունում":"Ազդանշանը շատ թույլ է"):"Սպասման ռեժիմ";
+ el("receiverStatus").classList.toggle("on",running&&x.received>=5);
+ el("waveAnimation").classList.toggle("active",running);
+ el("signalInfo").textContent=running?
+  `${x.mode==="AM"?"AM":x.mode==="FM"?"FM":"Չմոդուլացված"} ազդանշան․ ընդունիչին հասնող պայմանական ուժգնությունը ${Math.round(x.received)}% է։`:
+  "Փորձը դադարեցված է։ Փոխեք պարամետրերը և սեղմեք «Սկսել փորձը»։";
+ draw();
+}
+function fitCanvas(){
+ const rect=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
+ if(!rect.width||!rect.height)return;
+ canvas.width=Math.round(rect.width*dpr);canvas.height=Math.round(rect.height*dpr);
+ ctx.setTransform(dpr,0,0,dpr,0,0);draw();
+}
+function grid(w,h){
+ ctx.strokeStyle="#193651";ctx.lineWidth=1;
+ for(let x=0;x<w;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+ for(let y=0;y<h;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+ ctx.strokeStyle="#71869b";ctx.beginPath();ctx.moveTo(0,h/2);ctx.lineTo(w,h/2);ctx.stroke();
+}
+function draw(){
+ const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;
+ ctx.clearRect(0,0,w,h);ctx.fillStyle="#081a30";ctx.fillRect(0,0,w,h);grid(w,h);
+ if(!running){ctx.fillStyle="#fff";ctx.font="15px Arial";ctx.textAlign="center";ctx.fillText("Սկսեք փորձը՝ ալիքները դիտելու համար",w/2,h/2);return}
+ const x=readData(),center=h*.5,amp=Math.min(h*.32,90)*x.a/100;
+ const cycles=4+x.f/18,phaseShift=elapsed;
+ // AM/FM կրող ալիքի և ընդունված ալիքի պարզեցված տեսք
+ function carrier(px,received){
+  const t=px/w,modAM=x.mode==="AM"?(0.35+0.65*(.5+.5*Math.sin(t*Math.PI*4-phaseShift*.45))):1;
+  const fmShift=x.mode==="FM"?.75*Math.sin(t*Math.PI*4-phaseShift*.45):0;
+  const attenuation=received?x.attenuation:1;
+  const noise=received?(x.n/100)*(Math.sin(px*1.37+phaseShift*2.3)*amp*.55):0;
+  return center-Math.sin(t*cycles*Math.PI*2-phaseShift+fmShift)*amp*modAM*attenuation+noise;
+ }
+ ctx.beginPath();ctx.strokeStyle="#00d9ff";ctx.lineWidth=2;
+ for(let px=0;px<=w;px++){const y=carrier(px,false);if(px===0)ctx.moveTo(px,y);else ctx.lineTo(px,y)}
+ ctx.stroke();
+ ctx.beginPath();ctx.strokeStyle="#83e29b";ctx.lineWidth=1.7;
+ for(let px=0;px<=w;px++){const y=carrier(px,true);if(px===0)ctx.moveTo(px,y);else ctx.lineTo(px,y)}
+ ctx.stroke();
+ if(x.mode==="AM"){
+  ctx.beginPath();ctx.strokeStyle="#ffbb55";ctx.lineWidth=1.4;
+  for(let px=0;px<=w;px++){const t=px/w,env=.35+.65*(.5+.5*Math.sin(t*Math.PI*4-phaseShift*.45));const y=center-amp*env*x.attenuation;if(px===0)ctx.moveTo(px,y);else ctx.lineTo(px,y)}
+  ctx.stroke();
+  ctx.beginPath();for(let px=0;px<=w;px++){const t=px/w,env=.35+.65*(.5+.5*Math.sin(t*Math.PI*4-phaseShift*.45));const y=center+amp*env*x.attenuation;if(px===0)ctx.moveTo(px,y);else ctx.lineTo(px,y)}ctx.stroke();
+ }
+ ctx.textAlign="left";ctx.font="12px Arial";ctx.fillStyle="#00d9ff";ctx.fillText("Փոխանցվող",12,19);
+ ctx.fillStyle="#83e29b";ctx.fillText("Ընդունվող",12,36);
+ if(x.mode==="AM"){ctx.fillStyle="#ffbb55";ctx.fillText("AM ծրար",12,53)}
+}
+function animate(timestamp){
+ if(!running||reducedMotion)return;
+ if(timestamp-lastFrame>30){elapsed+=.035;draw();lastFrame=timestamp}
+ rafId=requestAnimationFrame(animate);
+}
+function start(){
+ if(running)return;running=true;update();lastFrame=0;
+ if(!reducedMotion)rafId=requestAnimationFrame(animate);
+}
+function stop(){
+ running=false;cancelAnimationFrame(rafId);update();
+}
+controls.forEach(id=>el(id).addEventListener(id==="modulation"?"change":"input",update));
+el("startBtn").addEventListener("click",start);
+el("stopBtn").addEventListener("click",stop);
+window.addEventListener("resize",fitCanvas);
+if("ResizeObserver"in window)new ResizeObserver(fitCanvas).observe(canvas);
+fitCanvas();update();
+</script>
+</body>
+</html>
